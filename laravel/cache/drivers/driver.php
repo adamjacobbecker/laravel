@@ -1,5 +1,7 @@
 <?php namespace Laravel\Cache\Drivers;
 
+use Laravel\Log;
+
 abstract class Driver {
 
 	/**
@@ -71,10 +73,14 @@ abstract class Driver {
 	 */
 	public function remember($key, $default, $minutes, $function = 'put')
 	{
-		if ( ! is_null($item = $this->get($key, null))) return $item;
+		if ( ! is_null($item = $this->get($key, null))){
+			Log::info('Cache hit for ' . $key);
+			return $item;
+		}
 
 		$this->$function($key, $default = value($default), $minutes);
 
+		Log::info('Cache miss for ' . $key);
 		return $default;
 	}
 
