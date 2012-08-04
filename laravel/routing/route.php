@@ -267,20 +267,21 @@ class Route {
 	 * Assumes controller name is plural.
 	 *
 	 * @param  string  $name
+	 * @param  array   $include  actions to generate routes for
 	 * @return void
 	 */
-	public static function resourceful($name)
+	public static function resourceful($name, $include = array('index', 'new', 'create', 'show', 'edit', 'update', 'destroy'))
 	{
 		$plural = Str::plural($name);
 		$singular = Str::singular($name);
 
-		Router::register("GET", "/$plural", array("as" => $plural, "uses" => "$plural@index"));
-		Router::register("GET", "/$plural/new", array("as" => "new_$plural", "uses" => "$plural@new"));
-		Router::register("POST", "/$plural", array("as" => $plural, "uses" => "$plural@create"));
-		Router::register("GET", "/$plural/(:id)", array("as" => $singular, "uses" => "$plural@show"));
-		Router::register("GET", "/$plural/(:id)/edit", array("as" => "edit_$singular", "uses" => "$plural@edit"));
-		Router::register("PUT", "/$plural/(:id)", array("as" => $singular, "uses" => "$plural@update"));
-		Router::register("DELETE", "/$plural/(:id)", array("as" => $singular, "uses" => "$plural@destroy"));
+		if (in_array('index', $include)) Router::register("GET", "$plural", array("as" => $plural, "uses" => "$plural@index"));
+		if (in_array('new', $include)) Router::register("GET", "$plural/new", array("as" => "new_$plural", "uses" => "$plural@new"));
+		if (in_array('create', $include)) Router::register("POST", "$plural", array("as" => $plural, "uses" => "$plural@create"));
+		if (in_array('show', $include)) Router::register("GET", "$plural/(:num)", array("as" => $singular, "uses" => "$plural@show"));
+		if (in_array('edit', $include)) Router::register("GET", "$plural/(:num)/edit", array("as" => "edit_$singular", "uses" => "$plural@edit"));
+		if (in_array('update', $include)) Router::register("PUT", "$plural/(:num)", array("as" => $singular, "uses" => "$plural@update"));
+		if (in_array('destroy', $include)) Router::register("DELETE", "$plural/(:num)", array("as" => $singular, "uses" => "$plural@destroy"));
 	}
 
 	/**
