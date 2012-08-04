@@ -262,6 +262,28 @@ class Route {
 	}
 
 	/**
+	 * Generates resourceful routes.
+	 *
+	 * Assumes controller name is plural.
+	 *
+	 * @param  string  $name
+	 * @return void
+	 */
+	public static function resourceful($name)
+	{
+		$plural = Str::plural($name);
+		$singular = Str::singular($name);
+
+		Router::register("GET", "/$plural", array("as" => $plural, "uses" => "$plural@index"));
+		Router::register("GET", "/$plural/new", array("as" => "new_$plural", "uses" => "$plural@new"));
+		Router::register("POST", "/$plural", array("as" => $plural, "uses" => "$plural@create"));
+		Router::register("GET", "/$plural/(:id)", array("as" => $singular, "uses" => "$plural@show"));
+		Router::register("GET", "/$plural/(:id)/edit", array("as" => "edit_$singular", "uses" => "$plural@edit"));
+		Router::register("PUT", "/$plural/(:id)", array("as" => $singular, "uses" => "$plural@update"));
+		Router::register("DELETE", "/$plural/(:id)", array("as" => $singular, "uses" => "$plural@destroy"));
+	}
+
+	/**
 	 * Register a controller with the router.
 	 *
 	 * @param  string|array  $controllers
