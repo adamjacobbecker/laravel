@@ -282,6 +282,7 @@ class Route {
 		if (in_array('edit', $include)) Router::register("GET", "$plural/(:num)/edit", array("as" => "edit_$singular", "uses" => "$plural@edit"));
 		if (in_array('update', $include)) Router::register("PUT", "$plural/(:num)", array("as" => $singular, "uses" => "$plural@update"));
 		if (in_array('destroy', $include)) Router::register("DELETE", "$plural/(:num)", array("as" => $singular, "uses" => "$plural@destroy"));
+		if (in_array('destroy', $include)) Router::register("GET", "$plural/(:num)/destroy", array("as" => $singular . "_destroy", "uses" => "$plural@destroy"));
 	}
 
 	/**
