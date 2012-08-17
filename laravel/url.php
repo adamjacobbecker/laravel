@@ -91,7 +91,7 @@ class URL {
 	 * @param  bool    $https
 	 * @return string
 	 */
-	public static function to($url = '', $https = null)
+	public static function to($url = '', $https = null, $relative = false)
 	{
 		// If the given URL is already valid or begins with a hash, we'll just return
 		// the URL unchanged since it is already well formed. Otherwise we will add
@@ -105,7 +105,7 @@ class URL {
 		// security for any new links generated.  So https for all secure links.
 		if (is_null($https)) $https = Request::secure();
 
-		$root = static::base().'/'.Config::get('application.index');
+		$root = ($relative ? "" : static::base()) .'/'.Config::get('application.index');
 
 		// Since SSL is not often used while developing the application, we allow the
 		// developer to disable SSL on all framework generated links to make it more
@@ -260,7 +260,7 @@ class URL {
 	 * @param  array   $parameters
 	 * @return string
 	 */
-	public static function to_route($name, $parameters = array())
+	public static function to_route($name, $parameters = array(), $relative = false)
 	{
 		if (is_null($route = Routing\Router::find($name)))
 		{
@@ -274,7 +274,7 @@ class URL {
 
 		$uri = trim(static::transpose(key($route), $parameters), '/');
 
-		return static::to($uri, $https);
+		return static::to($uri, $https, $relative);
 	}
 
 	/**

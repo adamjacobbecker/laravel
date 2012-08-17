@@ -380,6 +380,11 @@ function route($name, $parameters = array())
 	return Laravel\URL::to_route($name, $parameters);
 }
 
+function relative_route($name, $parameters = array())
+{
+	return Laravel\URL::to_route($name, $parameters, true);
+}
+
 /**
  * Determine if a given string begins with a given value.
  *
