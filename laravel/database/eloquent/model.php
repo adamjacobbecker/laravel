@@ -42,6 +42,8 @@ abstract class Model {
 	 */
 	public $includes = array();
 
+	public $includes_in_array = array();
+
 	/**
 	 * The primary key for the model on the database table.
 	 *
@@ -636,6 +638,10 @@ abstract class Model {
 			{
 				$attributes[$name] = $models;
 			}
+		}
+
+		foreach ($this->includes_in_array as $include) {
+			$attributes[$include] = call_user_func(array($this, $include));
 		}
 
 		return $attributes;
